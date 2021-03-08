@@ -1,9 +1,5 @@
 # StartUp
 #### Game Created withing the project [StartUpzKlasa](https://startupzklasa.pl/)
-## Table of contents
-* [Main Goal](#main-goal)
-* [Technologies](#technologies)
-* [Team](#team)
 ## Main Goal
 Our goal is to Create a game in Unity. We want to show that even in small group of young people you are able to craete something which will interest a lots of people.
 ## Technologies
