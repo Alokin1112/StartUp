@@ -7,9 +7,11 @@ public class PlayerAttack : MonoBehaviour
     public GameManager gameManager;
     private GameObject enemy;
     private bool canUse = true;
+    public Transform player;
     // Start is called before the first frame update
     private void Update()
     {
+        transform.position = player.position;
         if (enemy)
             if (Input.GetAxis("Fire") == 1f && enemy.tag == "Enemy" && canUse)
             {
@@ -28,7 +30,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private void setDelay()
     {
-        Debug.Log("zzz");
+        Debug.Log("Can Shoot");
         canUse = true;
     }
     private void OnTriggerExit2D(Collider2D other)

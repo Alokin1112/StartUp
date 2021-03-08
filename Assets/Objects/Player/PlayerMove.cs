@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    
+
     public float playerSpeed = 4f;
+    public GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +16,10 @@ public class PlayerMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        transform.Translate(playerSpeed * moveX * Time.deltaTime, 0, 0);
+        if (gameManager.canMove)
+        {
+            float moveX = Input.GetAxis("Horizontal");
+            transform.Translate(playerSpeed * moveX * Time.deltaTime, 0, 0);
+        }
     }
 }

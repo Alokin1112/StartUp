@@ -17,7 +17,7 @@ public class PlayerInteract : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetAxis("Use") == 1f && canUse)
+        if (Input.GetAxis("Use") == 1f && canUse && nearTo)
         {
             canUse = false;
             switch (nearTo.tag)
@@ -39,13 +39,22 @@ public class PlayerInteract : MonoBehaviour
                         nearTo = null;
                     }
                     break;
+                case "ControlPanel":
+                    {
+                        gameManager.switchMove();
+                        Debug.Log("Charging");
+                        gameManager.Invoke("switchMove", 3f);
+                    }
+                    break;
+                default:
+
+                    break;
             }
             Invoke("setDelay", 1f);
         }
     }
     private void setDelay()
     {
-        Debug.Log("zzz");
         canUse = true;
     }
     private void OnTriggerEnter2D(Collider2D other)
@@ -53,9 +62,8 @@ public class PlayerInteract : MonoBehaviour
         switch (other.tag)
         {
             case "Elevator":
-                nearTo = other.gameObject;
-                break;
             case "Ammo":
+            case "ControlPanel":
                 {
                     nearTo = other.gameObject;
                 }
@@ -64,8 +72,6 @@ public class PlayerInteract : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D other)
     {
-
-
         if (other.gameObject == nearTo)
             nearTo = null;
     }
