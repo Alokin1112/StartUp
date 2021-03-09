@@ -11,7 +11,6 @@ public class PlayerInteract : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -27,10 +26,7 @@ public class PlayerInteract : MonoBehaviour
                     break;
                 case "Elevator":
                     {
-                        if (transform.position.y < 1)
-                            transform.position = new Vector3(transform.position.x, transform.position.y + roomHeight, transform.position.z);
-                        else if (transform.position.y < 3)
-                            transform.position = new Vector3(transform.position.x, transform.position.y - roomHeight, transform.position.z);
+                        nearTo.GetComponent<Elevator>().UseElevator(roomHeight);
                     }
                     break;
                 case "Ammo":
