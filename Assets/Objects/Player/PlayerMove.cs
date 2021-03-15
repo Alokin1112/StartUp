@@ -9,12 +9,12 @@ public class PlayerMove : MonoBehaviour
     public GameManager gameManager;
     private Vector2 Rotation;
     private Vector2 Movement;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
         Rotation = new Vector2(transform.localScale.x, transform.localScale.y);
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -37,7 +37,7 @@ public class PlayerMove : MonoBehaviour
     }
     private void moveCharacter(Vector2 direction)
     {
-        rigidbody.velocity = direction * playerSpeed;
+        rb.velocity = direction * playerSpeed;
     }
     private void RotatePlayer(float direction)
     {

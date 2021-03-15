@@ -11,11 +11,14 @@ public class EnemyWalk : MonoBehaviour
     public float maxDistance = 5f;
     private float direction;
     private Vector2 Rotation;
+    private Vector2 dir;
+    private Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         Rotation = new Vector2(transform.localScale.x, transform.localScale.y);
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -23,10 +26,16 @@ public class EnemyWalk : MonoBehaviour
     {
         if (isNotStunned && Vector2.Distance(transform.position, player.position) > minDistance && Vector2.Distance(transform.position, player.position) < maxDistance)
         {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, enemyMovementSpeed * Time.deltaTime);
+            //transform.position = Vector2.MoveTowards(transform.position, player.position, enemyMovementSpeed * Time.deltaTime);
+            direction = player.transform.position.x - transform.position.x;
+            RotateEnemy(direction);
+            dir = new Vector2(direction % 1, 0);
+            moveEnemy(dir);
         }
-        direction = player.transform.position.x - transform.position.x;
-        RotateEnemy(direction);
+        else
+        {
+            dir = new Vector2(0, 0);
+        }
     }
     public void Stun(float amountOfTime)
     {
@@ -49,5 +58,9 @@ public class EnemyWalk : MonoBehaviour
         {
             transform.localScale = new Vector2(-Rotation.x, Rotation.y);
         }
+    }
+    private void moveEnemy(Vector2 dir)
+    {
+        rb.velocity = dir * enemyMovementSpeed;
     }
 }
