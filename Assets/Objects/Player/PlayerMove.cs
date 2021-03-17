@@ -10,11 +10,13 @@ public class PlayerMove : MonoBehaviour
     private Vector2 Rotation;
     private Vector2 Movement;
     private Rigidbody2D rb;
+    private List<Vector3> positions;
     // Start is called before the first frame update
     void Start()
     {
         Rotation = new Vector2(transform.localScale.x, transform.localScale.y);
         rb = GetComponent<Rigidbody2D>();
+        positions = new List<Vector3>();
     }
 
     // Update is called once per frame
@@ -30,10 +32,19 @@ public class PlayerMove : MonoBehaviour
         {
             Movement = new Vector2(0, 0);
         }
+        Debug.Log(gameManager.isRewinding);
     }
     private void FixedUpdate()
     {
         moveCharacter(Movement);
+        if (gameManager.isRewinding)
+        {
+            gameManager.Rewind(positions, this.gameObject);
+        }
+        else
+        {
+            Record();
+        }
     }
     private void moveCharacter(Vector2 direction)
     {
@@ -49,5 +60,11 @@ public class PlayerMove : MonoBehaviour
         {
             transform.localScale = new Vector2(-Rotation.x, Rotation.y);
         }
+    }
+    private void Record()
+    {
+        if (positions.Count > (gameManager.maxRewindTime / Time.fixedDeltaTime))
+            positions.RemoveAt(positions.Count - 1);
+        positions.Insert(0, transform.position);
     }
 }

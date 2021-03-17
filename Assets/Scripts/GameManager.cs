@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     [Header("User Interface")]
     public Text timeText;
     public Text ammoText;
+    [Header("Time")]
+    public bool isRewinding = false;
+    public float maxRewindTime = 5f;
     private void Start()
     {
         currentTime = nightLengthInMinutes * 60;
@@ -28,6 +31,14 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Koniec Nocy");
             Time.timeScale = 0;
+        }
+        if (Input.GetAxisRaw("Time") == 1)
+        {
+            StartRewinding();
+        }
+        else
+        {
+            StopRewinding();
         }
     }
     public void AttackEnemy(GameObject enemy)
@@ -54,6 +65,23 @@ public class GameManager : MonoBehaviour
     public void switchMove()
     {
         canMove = !canMove;
-        Debug.Log(canMove);
+        //Debug.Log(canMove);
+    }
+    public void StartRewinding()
+    {
+        isRewinding = true;
+    }
+    public void StopRewinding()
+    {
+        isRewinding = false;
+    }
+    public void Rewind(List<Vector3> pos, GameObject obj)
+    {
+        if (pos.Count > 1)
+        {
+            obj.transform.position = pos[0];
+            pos.RemoveAt(0);
+            pos.RemoveAt(0);
+        }
     }
 }
