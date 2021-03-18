@@ -63,7 +63,7 @@ public class PlayerMove : MonoBehaviour
     }
     private void Record()
     {
-        if (positions.Count > (gameManager.maxRewindTime / Time.fixedDeltaTime))
+        if (positions.Count > (gameManager.leftRewindTime / Time.fixedDeltaTime))
             positions.RemoveAt(positions.Count - 1);
         positions.Insert(0, transform.position);
     }

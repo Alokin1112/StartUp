@@ -35,6 +35,7 @@ public class EnemyWalk : MonoBehaviour
         else
         {
             dir = new Vector2(0, 0);
+            moveEnemy(dir);
         }
     }
     public void Stun(float amountOfTime)

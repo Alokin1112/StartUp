@@ -15,13 +15,18 @@ public class GameManager : MonoBehaviour
     [Header("User Interface")]
     public Text timeText;
     public Text ammoText;
+    public Text rewindTimeText;
     [Header("Time")]
     public bool isRewinding = false;
-    public float maxRewindTime = 5f;
+    public float maxRewindTime = 10f;
+    public float usedRewindTime = 0f;
+    public float leftRewindTime;
     private void Start()
     {
         currentTime = nightLengthInMinutes * 60;
         ammoText.text = ammo.ToString();
+        rewindTimeText.text = maxRewindTime.ToString();
+        leftRewindTime = maxRewindTime;
     }
     private void Update()
     {
@@ -74,14 +79,18 @@ public class GameManager : MonoBehaviour
     public void StopRewinding()
     {
         isRewinding = false;
+
     }
     public void Rewind(List<Vector3> pos, GameObject obj)
     {
-        if (pos.Count > 1)
+        rewindTimeText.text = leftRewindTime.ToString("F2");
+        if (pos.Count > 1 && leftRewindTime > 0)
         {
             obj.transform.position = pos[0];
             pos.RemoveAt(0);
-            pos.RemoveAt(0);
+            usedRewindTime += Time.deltaTime;
+            leftRewindTime = maxRewindTime - usedRewindTime;
+            Debug.Log(leftRewindTime);
         }
     }
 }
