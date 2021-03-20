@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     public Text timeText;
     public Text ammoText;
     public Text rewindTimeText;
+    public Scrollbar usingProgressBar;
+    private float maxProgressStatus;
+    private float loadingProgress = 0f;
     [Header("Time")]
     public bool isRewinding = false;
     public float maxRewindTime = 10f;
@@ -44,6 +47,16 @@ public class GameManager : MonoBehaviour
         else
         {
             StopRewinding();
+        }
+
+        if (usingProgressBar.IsActive())
+        {
+            loadingProgress += Time.deltaTime;
+            usingProgressBar.size = loadingProgress / maxProgressStatus;
+            if (loadingProgress >= maxProgressStatus)
+            {
+                usingProgressBar.gameObject.SetActive(false);
+            }
         }
     }
     public void AttackEnemy(GameObject enemy)
@@ -81,6 +94,12 @@ public class GameManager : MonoBehaviour
         isRewinding = false;
 
     }
+    public void showProgressBar(float maxTime)
+    {
+        maxProgressStatus = maxTime;
+        loadingProgress = 0f;
+        usingProgressBar.gameObject.SetActive(true);
+    }
     public void Rewind(List<Vector3> pos, GameObject obj)
     {
         rewindTimeText.text = leftRewindTime.ToString("F2");
@@ -90,7 +109,6 @@ public class GameManager : MonoBehaviour
             pos.RemoveAt(0);
             usedRewindTime += Time.deltaTime;
             leftRewindTime = maxRewindTime - usedRewindTime;
-            Debug.Log(leftRewindTime);
         }
     }
 }

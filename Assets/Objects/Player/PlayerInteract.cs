@@ -40,6 +40,7 @@ public class PlayerInteract : MonoBehaviour
                         gameManager.switchMove();
                         Debug.Log("Charging");
                         gameManager.Invoke("switchMove", 3f);
+                        gameManager.showProgressBar(3f);
                     }
                     break;
                 default:
