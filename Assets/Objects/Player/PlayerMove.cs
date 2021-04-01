@@ -32,7 +32,6 @@ public class PlayerMove : MonoBehaviour
         {
             Movement = new Vector2(0, 0);
         }
-        Debug.Log(gameManager.isRewinding);
     }
     private void FixedUpdate()
     {

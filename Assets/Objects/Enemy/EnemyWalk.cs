@@ -11,11 +11,13 @@ public class EnemyWalk : MonoBehaviour
     public float enemyMovementSpeed = .1f;
     public float minDistance = 1f;
     public float maxDistance = 5f;
+    public float maxYDistance = 0.5f;
     private float direction;
     private Vector2 Rotation;
     private Vector2 dir;
     private Vector2 normalWalkingSpeed = new Vector2(2, 0);
     private Rigidbody2D rb;
+    public Collider2D col;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,8 @@ public class EnemyWalk : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isNotStunned && Vector2.Distance(transform.position, player.position) > minDistance && Vector2.Distance(transform.position, player.position) < maxDistance)
+        Vector2 dist = new Vector2(Mathf.Abs(transform.position.x - player.position.x), Mathf.Abs(transform.position.y - player.position.y));
+        if (isNotStunned && dist.x > minDistance && dist.x < maxDistance && dist.y < maxYDistance)
         {
             isNotChasing = false;
             //transform.position = Vector2.MoveTowards(transform.position, player.position, enemyMovementSpeed * Time.deltaTime);
@@ -58,6 +61,7 @@ public class EnemyWalk : MonoBehaviour
     private void changeStun()
     {
         isNotStunned = !isNotStunned;
+        col.isTrigger = !col.isTrigger;
     }
     private void RotateEnemy(float direction)
     {
@@ -73,7 +77,6 @@ public class EnemyWalk : MonoBehaviour
     private void StopWalking()
     {
         Vector2 velocity = rb.velocity;
-        Debug.Log("Zatrzymuje sie");
         if (isNotChasing)
             rb.velocity = new Vector2(0, 0);
         Invoke("StartWalking", walkingTime);
@@ -81,7 +84,6 @@ public class EnemyWalk : MonoBehaviour
     private void StartWalking()
     {
         normalWalkingSpeed *= (-1f);
-        Debug.Log("Chodze");
         if (isNotChasing)
         {
             rb.velocity = normalWalkingSpeed;

@@ -1259,8 +1259,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1816319578}
   - component: {fileID: 1816319577}
-  - component: {fileID: 1816319576}
   - component: {fileID: 1816319579}
+  - component: {fileID: 1816319576}
   - component: {fileID: 1816319580}
   m_Layer: 0
   m_Name: BasicEnemy
@@ -1279,7 +1279,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0030636191, y: -0.00089502335}
@@ -1395,7 +1395,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyMovementSpeed: 5
   minDistance: 1
-  maxDistance: 2
+  maxDistance: 3
+  col: {fileID: 1816319576}
 --- !u!1 &1822642959
 GameObject:
   m_ObjectHideFlags: 0
