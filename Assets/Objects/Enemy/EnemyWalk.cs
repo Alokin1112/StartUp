@@ -95,4 +95,17 @@ public class EnemyWalk : MonoBehaviour
     {
         rb.velocity = dir * enemyMovementSpeed;
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Trap":
+                {
+                    Debug.Log("Trapped");
+                    Stun(10f);
+                    Destroy(other.gameObject);
+                }
+                break;
+        }
+    }
 }

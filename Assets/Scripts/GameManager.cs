@@ -10,8 +10,11 @@ public class GameManager : MonoBehaviour
     private float currentTime;
     [Header("Player Settings")]
     public int ammo = 2;
+    public int traps = 2;
     public bool canMove = true;
     public float stunDuration = 2f;
+    public Transform player;
+    public float settingTrapTime = 2f;
     [Header("User Interface")]
     public Text timeText;
     public Text ammoText;
@@ -24,6 +27,8 @@ public class GameManager : MonoBehaviour
     public float maxRewindTime = 10f;
     public float usedRewindTime = 0f;
     public float leftRewindTime;
+    [Header("Prefabs")]
+    public GameObject trapPrefab;
     private void Start()
     {
         currentTime = nightLengthInMinutes * 60;
@@ -40,7 +45,7 @@ public class GameManager : MonoBehaviour
             Debug.Log("Koniec Nocy");
             Time.timeScale = 0;
         }
-        if (Input.GetAxisRaw("Time") == 1)
+        if (Input.GetAxisRaw("Time") == 1 && canMove)
         {
             StartRewinding();
         }
@@ -48,7 +53,10 @@ public class GameManager : MonoBehaviour
         {
             StopRewinding();
         }
-
+        if (Input.GetAxisRaw("setTrap") == 1 && canMove && traps > 0)
+        {
+            setTrap();
+        }
         if (usingProgressBar.IsActive())
         {
             loadingProgress += Time.deltaTime;
@@ -110,5 +118,14 @@ public class GameManager : MonoBehaviour
             usedRewindTime += Time.deltaTime;
             leftRewindTime = maxRewindTime - usedRewindTime;
         }
+    }
+    public void setTrap()
+    {
+        traps--;
+        canMove = false;
+        Vector3 pos = new Vector3(player.position.x, player.position.y - 0.4f, player.position.z);
+        Invoke("switchMove", settingTrapTime);
+        Instantiate(trapPrefab, pos, Quaternion.identity);
+        showProgressBar(settingTrapTime);
     }
 }
