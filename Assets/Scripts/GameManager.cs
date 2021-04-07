@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public Text ammoText;
     public Text rewindTimeText;
     public Scrollbar usingProgressBar;
+    public Text weaponName;
     private float maxProgressStatus;
     private float loadingProgress = 0f;
     [Header("Time")]
@@ -25,12 +26,19 @@ public class GameManager : MonoBehaviour
     public float usedRewindTime = 0f;
     public float leftRewindTime;
     [Header("Prefabs")]
+    public GameObject enemyPrefab;
     public GameObject trapPrefab;
+    [Header("EnemySpawn")]
+    public int maxEnemySpawnAmount = 3;
+    public float minSpawnTime = 20f;
+    public float maxSpawnTime = 45f;
+    public Transform[] spawners;
     private void Start()
     {
         currentTime = nightLengthInMinutes * 60;
         rewindTimeText.text = maxRewindTime.ToString();
         leftRewindTime = maxRewindTime;
+        SpawnEnemy();
     }
     private void Update()
     {
@@ -60,16 +68,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void AddAmmo(int amount, GameObject destroyObject)
-    {
-        pAttackScript.AddAmmo(amount);
-        Destroy(destroyObject, 0.1f);
-    }
     public void switchMove()
     {
         canMove = !canMove;
         //Debug.Log(canMove);
     }
+    ///Rewind Mechanic
     public void StartRewinding()
     {
         isRewinding = true;
@@ -99,6 +103,12 @@ public class GameManager : MonoBehaviour
             leftRewindTime = maxRewindTime - usedRewindTime;
         }
     }
+    ///Weapons
+    public void AddAmmo(int amount, GameObject destroyObject)
+    {
+        pAttackScript.AddAmmo(amount);
+        Destroy(destroyObject, 0.1f);
+    }
     public void AttackEnemy(GameObject enemy, float stunDuration)
     {
         {
@@ -114,8 +124,21 @@ public class GameManager : MonoBehaviour
         Instantiate(trapPrefab, pos, Quaternion.identity);
         showProgressBar(castTime);
     }
-    public void changeAmmoText(int amount)
+    public void changeAmmoText(int amount, string _weaponName)
     {
         ammoText.text = amount.ToString();
+        weaponName.text = _weaponName;
+    }
+    private void SpawnEnemy()
+    {
+        Debug.Log("SpawnWorks");
+        if (maxEnemySpawnAmount > 0)
+        {
+            maxEnemySpawnAmount--;
+            int spawnIndex = Random.Range(0, spawners.Length);
+            float spawnTime = Random.Range(minSpawnTime, maxSpawnTime);
+            Instantiate(enemyPrefab, spawners[spawnIndex].position, Quaternion.identity);
+            Invoke("SpawnEnemy", spawnTime);
+        }
     }
 }

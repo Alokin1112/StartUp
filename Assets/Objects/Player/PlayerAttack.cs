@@ -15,7 +15,7 @@ public class PlayerAttack : MonoBehaviour
     {
         Weapons[0] = new WeaponClass("Taser", 3, .5f, 2f);
         Weapons[1] = new WeaponClass("Trap", 2, 2f, 5f);
-        gameManager.changeAmmoText(Weapons[usingWeapon].ammo);
+        gameManager.changeAmmoText(Weapons[usingWeapon].ammo, Weapons[usingWeapon].name);
     }
     private void Update()
     {
@@ -37,7 +37,7 @@ public class PlayerAttack : MonoBehaviour
                         {
                             canUse = false;
                             Weapons[usingWeapon].substractAmmo();
-                            gameManager.changeAmmoText(Weapons[usingWeapon].ammo);
+                            gameManager.changeAmmoText(Weapons[usingWeapon].ammo, Weapons[usingWeapon].name);
                             gameManager.AttackEnemy(enemy, Weapons[usingWeapon].stunTime);
                             enemy = null;
                             Invoke("setDelay", Weapons[usingWeapon].castTime);
@@ -48,7 +48,7 @@ public class PlayerAttack : MonoBehaviour
                     {
                         canUse = false;
                         Weapons[usingWeapon].substractAmmo();
-                        gameManager.changeAmmoText(Weapons[usingWeapon].ammo);
+                        gameManager.changeAmmoText(Weapons[usingWeapon].ammo, Weapons[usingWeapon].name);
                         gameManager.setTrap(Weapons[usingWeapon].castTime);
                         Invoke("setDelay", Weapons[usingWeapon].castTime);
                     }
@@ -60,13 +60,13 @@ public class PlayerAttack : MonoBehaviour
         canSwap = false;
         usingWeapon = (usingWeapon + 1) % Weapons.Length;
         Debug.Log(usingWeapon);
-        gameManager.changeAmmoText(Weapons[usingWeapon].ammo);
+        gameManager.changeAmmoText(Weapons[usingWeapon].ammo, Weapons[usingWeapon].name);
         Invoke("setSwap", 0.5f);
     }
     public void AddAmmo(int amount = 1)
     {
         Weapons[usingWeapon].addAmmo(amount);
-        gameManager.changeAmmoText(Weapons[usingWeapon].ammo);
+        gameManager.changeAmmoText(Weapons[usingWeapon].ammo, Weapons[usingWeapon].name);
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
