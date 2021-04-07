@@ -1571,12 +1571,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nightLengthInMinutes: 2
-  ammo: 2
-  traps: 2
   canMove: 1
-  stunDuration: 2
   player: {fileID: 1915767742}
-  settingTrapTime: 2
+  pAttackScript: {fileID: 314753494}
   timeText: {fileID: 274471329}
   ammoText: {fileID: 1468947083}
   rewindTimeText: {fileID: 939504383}

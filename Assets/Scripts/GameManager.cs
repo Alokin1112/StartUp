@@ -9,12 +9,9 @@ public class GameManager : MonoBehaviour
     public float nightLengthInMinutes = .1f;
     private float currentTime;
     [Header("Player Settings")]
-    public int ammo = 2;
-    public int traps = 2;
     public bool canMove = true;
-    public float stunDuration = 2f;
     public Transform player;
-    public float settingTrapTime = 2f;
+    public PlayerAttack pAttackScript;
     [Header("User Interface")]
     public Text timeText;
     public Text ammoText;
@@ -32,7 +29,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentTime = nightLengthInMinutes * 60;
-        ammoText.text = ammo.ToString();
         rewindTimeText.text = maxRewindTime.ToString();
         leftRewindTime = maxRewindTime;
     }
@@ -53,10 +49,6 @@ public class GameManager : MonoBehaviour
         {
             StopRewinding();
         }
-        if (Input.GetAxisRaw("setTrap") == 1 && canMove && traps > 0)
-        {
-            setTrap();
-        }
         if (usingProgressBar.IsActive())
         {
             loadingProgress += Time.deltaTime;
@@ -67,26 +59,11 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void AttackEnemy(GameObject enemy)
-    {
-        if (ammo > 0)
-        {
-            ammo--;
-            ammoText.text = ammo.ToString();
-            enemy.GetComponent<EnemyWalk>().Stun(stunDuration);
-            paralyzedEnemies++;
-        }
-        else
-        {
-            Debug.Log("Not Enough Ammo");
-        }
-    }
+
     public void AddAmmo(int amount, GameObject destroyObject)
     {
-        ammo += amount;
-        ammoText.text = ammo.ToString();
+        pAttackScript.AddAmmo(amount);
         Destroy(destroyObject, 0.1f);
-        Debug.Log(ammo);
     }
     public void switchMove()
     {
@@ -104,9 +81,12 @@ public class GameManager : MonoBehaviour
     }
     public void showProgressBar(float maxTime)
     {
-        maxProgressStatus = maxTime;
-        loadingProgress = 0f;
-        usingProgressBar.gameObject.SetActive(true);
+        if (maxTime > 0)
+        {
+            maxProgressStatus = maxTime;
+            loadingProgress = 0f;
+            usingProgressBar.gameObject.SetActive(true);
+        }
     }
     public void Rewind(List<Vector3> pos, GameObject obj)
     {
@@ -119,13 +99,23 @@ public class GameManager : MonoBehaviour
             leftRewindTime = maxRewindTime - usedRewindTime;
         }
     }
-    public void setTrap()
+    public void AttackEnemy(GameObject enemy, float stunDuration)
     {
-        traps--;
+        {
+            enemy.GetComponent<EnemyWalk>().Stun(stunDuration);
+            paralyzedEnemies++;
+        }
+    }
+    public void setTrap(float castTime)
+    {
         canMove = false;
         Vector3 pos = new Vector3(player.position.x, player.position.y - 0.4f, player.position.z);
-        Invoke("switchMove", settingTrapTime);
+        Invoke("switchMove", castTime);
         Instantiate(trapPrefab, pos, Quaternion.identity);
-        showProgressBar(settingTrapTime);
+        showProgressBar(castTime);
+    }
+    public void changeAmmoText(int amount)
+    {
+        ammoText.text = amount.ToString();
     }
 }
